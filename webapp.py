@@ -3,6 +3,8 @@ Simple app to upload an image via a web form
 and view the inference results on the image in the browser.
 """
 import argparse
+# from asyncio.windows_events import NULL
+# from curses.ascii import NUL
 import io
 import os
 from unittest import result
@@ -13,7 +15,7 @@ import sqlite3
 import time
 
 import torch
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, session
 
 
 
@@ -23,8 +25,15 @@ app = Flask(__name__)
 def hello():
     return "Hello World!"
 
-@app.route("/predict", methods=["GET", "POST"])
-def predict():
+# @app.route('/login/<name>', methods=['Get'])
+# def login(name):
+#     print(name)
+#     session['username'] = name
+#     print(session['username'] )
+#     return "welcome " + name
+
+@app.route("/predict/<name>", methods=["GET", "POST"])
+def predict(name):
     # print("step00")
     if request.method == "POST":
         if "file" not in request.files:         
@@ -75,12 +84,26 @@ def predict():
                 bottlecount = bottlecount + 1
         
         #update db
-        conn = sqlite3.connect('student.db')
-        cur = conn.cursor()
-        sqlcomm = "insert into students values('Jiayu','10','Plano West Senior High School'," + str(bottlecount) + ",'" + time.strftime('%Y-%m-%d', time.localtime()) + "')" 
-        # print(sqlcomm)
-        cur.execute(sqlcomm)
-        conn.commit()
+     
+        if name is not None: 
+            sqlcommand = "select * from students where name='" + name + "' LIMIT  1"
+            resultlist = getDatafromDB(sqlcommand)
+            print(resultlist)
+            conn = sqlite3.connect('student.db')
+            cur = conn.cursor()
+            sqlcomm = "insert into students values('" + resultlist[0]['name'] +"','" + resultlist[0]['class'] +"','" + resultlist[0]['school'] +"',"\
+                 + str(bottlecount) + ",'" + time.strftime('%Y-%m-%d', time.localtime()) + "')" 
+            # print(sqlcomm)
+            cur.execute(sqlcomm)
+            conn.commit()
+        else:
+            conn = sqlite3.connect('student.db')
+            cur = conn.cursor()
+            sqlcomm = "insert into students values('Jiayu','10','Plano West Senior High School',"\
+                 + str(bottlecount) + ",'" + time.strftime('%Y-%m-%d', time.localtime()) + "')" 
+            # print(sqlcomm)
+            cur.execute(sqlcomm)
+            conn.commit()
 
         # data = cur.fetchall()
         conn.close()
@@ -190,4 +213,5 @@ if __name__ == "__main__":
 
     model.eval()
     app.debug = True
+    # app.secret_key = "affedasafafqwe"
     app.run(host="127.0.0.1", port=args.port)  # debug=True causes Restarting with stat
