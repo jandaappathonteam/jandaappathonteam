@@ -24,7 +24,7 @@ def hello():
 
 @app.route("/predict", methods=["GET", "POST"])
 def predict():
-    print("step00")
+    # print("step00")
     if request.method == "POST":
         if "file" not in request.files:         
             return redirect(request.url)
@@ -47,7 +47,7 @@ def predict():
         for img in results.imgs:
             img_base64 = Image.fromarray(img)           
             # img_base64.save("static/image0.jpg", format="JPEG")
-            img_base64.save("static/" + uuidfilename, format="JPEG")
+            img_base64.save("static/images/" + uuidfilename, format="JPEG")
 
         data = results.pandas().xyxy[0].to_json(orient="records")
         # print (type(data))
@@ -76,7 +76,7 @@ def predict():
                     "code": "200",
                     "message": "successful",
                     "count": bottlecount,
-                    "url": "pict/" +  uuidfilename
+                    "url": "/images/" +  uuidfilename
                 }
 
     return resultdata
