@@ -10,6 +10,7 @@ from PIL import Image
 import json
 import uuid
 import sqlite3
+import time
 
 import torch
 from flask import Flask, render_template, request, redirect, jsonify
@@ -66,11 +67,23 @@ def predict():
         # for v in statis.keys():
         #     arrayData.append({"class": v, "value": statis[v]})
 
+        # count how many bottles in the AI detection result
         bottlecount = 0 
         for i in datajson:
             # print(i)
             if i['name'] == "bottle":
                 bottlecount = bottlecount + 1
+        
+        #update db
+        conn = sqlite3.connect('student.db')
+        cur = conn.cursor()
+        sqlcomm = "insert into students values('Jiayu','10','Plano West Senior High School'," + str(bottlecount) + ",'" + time.strftime('%Y-%m-%d', time.localtime()) + "')" 
+        # print(sqlcomm)
+        cur.execute(sqlcomm)
+        conn.commit()
+
+        # data = cur.fetchall()
+        conn.close()
 
     resultdata = {
                     "code": "200",
