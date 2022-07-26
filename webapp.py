@@ -182,19 +182,19 @@ def getTotal(schoolname):
     data = cur.fetchall()
     conn.close()
 
-    datalist = []
+    result = {}
     
     for row in data:
         result = {}
         result['school'] = row[0]
         result['count'] = row[1]
-        datalist.append(result)
+        
    
     resultdic = {}
     resultdic["code"] = '200'
     resultdic["message"] = "successful"
-    resultdic["total"] = str(len(datalist))
-    resultdic["data"] =  datalist  
+    resultdic["count"] = result['count']
+    resultdic["school"] = result['school']  
 
     return jsonify(resultdic)
 
