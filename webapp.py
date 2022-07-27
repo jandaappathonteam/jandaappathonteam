@@ -138,7 +138,7 @@ def mitpredict(name):
     if request.method == "POST":        
         file_bytes = request.data
         print(type(file_bytes))
-        with open("client-src.jpg","wb") as f:
+        with open("client-src1.jpg","wb") as f:
             f.write(file_bytes)
         
         
