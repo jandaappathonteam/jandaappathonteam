@@ -34,7 +34,7 @@ def hello():
 
 @app.route("/predict/<name>", methods=["GET", "POST"])
 def predict(name):
-    # print("step00")
+    print("2022072701")
     if request.method == "POST":
         if "file" not in request.files:         
             return redirect(request.url)
