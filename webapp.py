@@ -35,6 +35,7 @@ def hello():
 @app.route("/predict/<name>", methods=["GET", "POST"])
 def predict(name):
     print("2022072701")
+    bottlecount = 0
     if request.method == "POST":
         if "file" not in request.files:         
             return redirect(request.url)
@@ -77,7 +78,7 @@ def predict(name):
         #     arrayData.append({"class": v, "value": statis[v]})
 
         # count how many bottles in the AI detection result
-        bottlecount = 0 
+         
         for i in datajson:
             # print(i)
             if i['name'] == "bottle":
