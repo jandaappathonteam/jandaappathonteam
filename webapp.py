@@ -135,12 +135,13 @@ def mitpredict(name):
     print("2022072701")
     
     resultdata = {}
+    resultdata["student"] = name
+    resultdata["time"] = time.time
     if request.method == "POST":        
         file_bytes = request.data
         print(type(file_bytes))
         with open("client-src1.jpg","wb") as f:
             f.write(file_bytes)
-        
         
     #     # img_bytes = file.read()
     #     # img = Image.open(io.BytesIO(file_bytes))
