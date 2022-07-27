@@ -41,6 +41,7 @@ def predict(name):
         if "file" not in request.files:         
             return redirect(request.url)
         file = request.files["file"]
+        print(type(file))
         if not file:
             return
         
@@ -123,6 +124,104 @@ def predict(name):
                         "count": 0,
                         "url": "0"
                     }
+
+    return resultdata
+    # return redirect("static/image0.jpg")
+    # return render_template("index.html")
+
+
+@app.route("/mitpredict/<name>", methods=["POST"])
+def mitpredict(name):
+    print("2022072701")
+    
+    resultdata = {}
+    if request.method == "POST":        
+        file_bytes = request.data
+        print(type(file_bytes))
+        with open("client-src.jpg","wb") as f:
+            f.write(file_bytes)
+        
+        
+    #     # img_bytes = file.read()
+    #     # img = Image.open(io.BytesIO(file_bytes))
+    #     img = Image.open("client-src.jpg")
+    #     results = model(img, size=640)
+    #     strResults = str(results)
+
+    #     # for debugging
+    #     # data = results.pandas().xyxy[0].to_json(orient="records")
+    #     # return data
+
+    #     uuidfilename = str(uuid.uuid1()) +".jpg"
+
+    #     results.render()  # updates results.imgs with boxes and labels
+    #     for img in results.imgs:
+    #         img_base64 = Image.fromarray(img)           
+    #         # img_base64.save("static/image0.jpg", format="JPEG")
+    #         img_base64.save("static/images/" + uuidfilename, format="JPEG")
+
+    #     data = results.pandas().xyxy[0].to_json(orient="records")
+    #     # print (type(data))
+    #     datajson = json.loads(data)
+    #     # print(type(datajson))
+
+    #     # statis = {}
+    #     # for i in datajson:
+    #     #     # print(i)
+    #     #     name = i['name']
+    #     #     if statis.__contains__(name):
+    #     #         statis[name] = statis[name] + 1
+    #     #     else:
+    #     #         statis[name] = 1
+    #     # arrayData = []
+    #     # for v in statis.keys():
+    #     #     arrayData.append({"class": v, "value": statis[v]})
+
+    #     # count how many bottles in the AI detection result
+    #     bottlecount = 0
+    #     for i in datajson:
+    #         # print(i)
+    #         if i['name'] == "bottle":
+    #             bottlecount = bottlecount + 1
+        
+    #     #update db
+     
+    #     if name is not None: 
+    #         sqlcommand = "select * from students where name='" + name + "' LIMIT  1"
+    #         resultlist = getDatafromDB(sqlcommand)
+    #         print(resultlist)
+    #         conn = sqlite3.connect('student.db')
+    #         cur = conn.cursor()
+    #         sqlcomm = "insert into students values('" + resultlist[0]['name'] +"','" + resultlist[0]['class'] +"','" + resultlist[0]['school'] +"',"\
+    #              + str(bottlecount) + ",'" + time.strftime('%Y-%m-%d', time.localtime()) + "')" 
+    #         # print(sqlcomm)
+    #         cur.execute(sqlcomm)
+    #         conn.commit()
+    #     else:
+    #         conn = sqlite3.connect('student.db')
+    #         cur = conn.cursor()
+    #         sqlcomm = "insert into students values('Jiayu','10','Plano West Senior High School',"\
+    #              + str(bottlecount) + ",'" + time.strftime('%Y-%m-%d', time.localtime()) + "')" 
+    #         # print(sqlcomm)
+    #         cur.execute(sqlcomm)
+    #         conn.commit()
+
+    #     # data = cur.fetchall()
+    #     conn.close()
+
+    #     resultdata = {
+    #                     "code": "200",
+    #                     "message": "successful",
+    #                     "count": bottlecount,
+    #                     "url": "/images/" +  uuidfilename
+    #                 }
+    # else:
+    #     resultdata = {
+    #                     "code": "200",
+    #                     "message": "not using post method",
+    #                     "count": 0,
+    #                     "url": "0"
+    #                 }
 
     return resultdata
     # return redirect("static/image0.jpg")
