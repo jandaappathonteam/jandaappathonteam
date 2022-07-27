@@ -32,7 +32,7 @@ def hello():
 #     print(session['username'] )
 #     return "welcome " + name
 
-@app.route("/predict/<name>", methods=["GET", "POST"])
+@app.route("/predict/<name>", methods=["POST"])
 def predict(name):
     print("2022072701")
     
