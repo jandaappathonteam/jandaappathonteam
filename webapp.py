@@ -45,7 +45,8 @@ def compress_image(outfile, mb=5, quality=85, k=0.9): # 通常你只需要修改
     while o_size > mb:
         im = Image.open(outfile)
         x, y = im.size
-        out = im.resize((int(x*k), int(y*k)), Image.ANTIALIAS)  # 最后一个参数设置可以提高图片转换后的质量
+        # out = im.resize((int(x*k), int(y*k)), Image.ANTIALIAS)  # 最后一个参数设置可以提高图片转换后的质量
+        out = im.resize((int(x*k), int(y*k)), Image.LANCZOS)
         try:
             out.save(outfile, quality=quality)  # quality为保存的质量，从1（最差）到95（最好），此时为85
         except Exception as e:
