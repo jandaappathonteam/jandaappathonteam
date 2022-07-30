@@ -3,13 +3,13 @@ Simple app to upload an image via a web form
 and view the inference results on the image in the browser.
 """
 import argparse
-# from asyncio.windows_events import NULL
-# from curses.ascii import NUL
+
 import io
 import os
 from unittest import result
 from PIL import Image
 from PIL import ImageFile
+
 import json
 import uuid
 import sqlite3
@@ -56,12 +56,6 @@ def compress_image(outfile, mb=5, quality=85, k=0.9): # 通常你只需要修改
     return outfile
 
 
-# @app.route('/login/<name>', methods=['Get'])
-# def login(name):
-#     print(name)
-#     session['username'] = name
-#     print(session['username'] )
-#     return "welcome " + name
 
 @app.route("/predict/<name>", methods=["POST"])
 def predict(name):
@@ -81,35 +75,19 @@ def predict(name):
         results = model(img, size=640)
         strResults = str(results)
 
-        # for debugging
-        # data = results.pandas().xyxy[0].to_json(orient="records")
-        # return data
-
+       
         uuidfilename = str(uuid.uuid1()) +".jpg"
 
         results.render()  # updates results.imgs with boxes and labels
         for img in results.imgs:
-            img_base64 = Image.fromarray(img)           
-            # img_base64.save("static/image0.jpg", format="JPEG")
+            img_base64 = Image.fromarray(img)       
+           
             img_base64.save("static/images/" + uuidfilename, format="JPEG")
 
         data = results.pandas().xyxy[0].to_json(orient="records")
         # print (type(data))
         datajson = json.loads(data)
-        # print(type(datajson))
-
-        # statis = {}
-        # for i in datajson:
-        #     # print(i)
-        #     name = i['name']
-        #     if statis.__contains__(name):
-        #         statis[name] = statis[name] + 1
-        #     else:
-        #         statis[name] = 1
-        # arrayData = []
-        # for v in statis.keys():
-        #     arrayData.append({"class": v, "value": statis[v]})
-
+        
         # count how many bottles in the AI detection result
         bottlecount = 0
         for i in datajson:
@@ -157,8 +135,6 @@ def predict(name):
                     }
 
     return resultdata
-    # return redirect("static/image0.jpg")
-    # return render_template("index.html")
 
 
 @app.route("/mitpredict/<name>", methods=["POST"])
@@ -166,8 +142,7 @@ def mitpredict(name):
     print("2022072702")
     
     resultdata = {}
-    # resultdata["student"] = name
-    # resultdata["time"] = str(time.time())
+
     if request.method == "POST":        
         file_bytes = request.data
         print(type(file_bytes))
@@ -185,10 +160,7 @@ def mitpredict(name):
         strResults = str(results)
         # print(strResults) 
 
-        # for debugging
-        # data = results.pandas().xyxy[0].to_json(orient="records")
-        # return data
-
+     
         uuidfilename = str(uuid.uuid1()) +".jpg"
 
         results.render()  # updates results.imgs with boxes and labels
@@ -200,20 +172,7 @@ def mitpredict(name):
         data = results.pandas().xyxy[0].to_json(orient="records")
         # print (type(data))
         datajson = json.loads(data)
-        # print(type(datajson))
-
-        # statis = {}
-        # for i in datajson:
-        #     # print(i)
-        #     name = i['name']
-        #     if statis.__contains__(name):
-        #         statis[name] = statis[name] + 1
-        #     else:
-        #         statis[name] = 1
-        # arrayData = []
-        # for v in statis.keys():
-        #     arrayData.append({"class": v, "value": statis[v]})
-
+        
         # count how many bottles in the AI detection result
         bottlecount = 0
         for i in datajson:
@@ -261,9 +220,6 @@ def mitpredict(name):
                     }
 
     return resultdata
-    # return redirect("static/image0.jpg")
-    # return render_template("index.html")
-
 
 #DB operation
 def getDatafromDB(sqlcommand):
@@ -358,5 +314,4 @@ if __name__ == "__main__":
 
     model.eval()
     app.debug = True
-    # app.secret_key = "affedasafafqwe"
     app.run(host="127.0.0.1", port=args.port)  # debug=True causes Restarting with stat
